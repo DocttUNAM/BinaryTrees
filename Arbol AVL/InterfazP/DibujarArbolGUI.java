@@ -55,10 +55,18 @@ class ArbolPanel extends JPanel {
 
             g.setColor(Color.BLACK);
             g.fillOval(punto.x - 20, punto.y - 20, 40, 40);
+            Font originalFont = g.getFont();
+            Font nuevaFuente = new Font(originalFont.getName(), Font.BOLD, 16); // 16 es el nuevo tamano
+            g.setFont(nuevaFuente);
             g.setColor(Color.WHITE);
+            String valorNodoStr;
+            if (DibujarArbolGUI.modoNumerico) {
+                valorNodoStr = String.valueOf(nodo.getValue());
+            }else{
             char asciiChar = (char) nodo.getValue();
-            String asciiString = Character.toString(asciiChar);
-            g.drawString(asciiString, punto.x - 5, punto.y + 5);
+                valorNodoStr =  Character.toString(asciiChar);
+            }
+            g.drawString(valorNodoStr, punto.x - 5, punto.y + 5);
             g.setColor(Color.BLACK);
             g.drawString(String.valueOf(nodo.getEq()), punto.x - 5, punto.y - 20);
 
@@ -79,6 +87,7 @@ class ArbolPanel extends JPanel {
 
 public class DibujarArbolGUI extends JFrame {
     private AVL arbol;
+    public static boolean modoNumerico = true; // Modo predeterminado
     private ArbolPanel arbolPanel;
 
     public DibujarArbolGUI() {
@@ -102,11 +111,28 @@ public class DibujarArbolGUI extends JFrame {
         crearArbolItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                inicializarArbol(); // Lógica para inicializar el árbol
-                arbolPanel = new ArbolPanel(arbol); // Crear ArbolPanel después de inicializar el árbol
-                add(arbolPanel); // Agregar ArbolPanel al JFrame
-                revalidate(); // Actualizar el contenido del JFrame
-                JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Arbol creado");
+                // Mostrar un JOptionPane con opciones para el modo
+                Object[] opciones = {"Modo Numerico", "Modo Letras"};
+                int seleccion = JOptionPane.showOptionDialog(
+                        DibujarArbolGUI.this,
+                        "Selecciona el modo:",
+                        "Modo",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        opciones,
+                        opciones[0]
+                );
+
+                // Determinar el modo seleccionado por el usuario
+                if (seleccion == 0) {
+                    modoNumerico = true;
+                    JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Modo Numerico seleccionado");
+                } else if (seleccion == 1) {
+                    modoNumerico = false;
+                    JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Modo Letras seleccionado");
+                }
+                inicializarArbol(); // Lógica para inicializar el arbol
             }
         });
 
@@ -115,18 +141,41 @@ public class DibujarArbolGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Pide al usuario que introduzca el valor del nuevo nodo
                 String valorNodoStr = JOptionPane.showInputDialog(DibujarArbolGUI.this, "Introduce el valor del nuevo nodo:");
-        
+                boolean b;
                 // Intenta convertir el valor del nuevo nodo a entero
                 try {
+                            if (!modoNumerico) {
+                    throw new NumberFormatException();
+                            }
                     int valorNodo = Integer.parseInt(valorNodoStr);
-                        // Si el nodo padre existe, agrega el nuevo nodo
-                            arbol.MainTree.insertar(new Nodo(valorNodo));
+                            b=arbol.MainTree.insertar(new Nodo(valorNodo));
                             revalidate(); // Actualizar el contenido del JFrame
                             repaint();
-                            JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Nodo añadido con éxito");
+                            if(b)
+                            JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Nodo anadido con exito");
+                            else
+                            JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Nodo ya existente");
                 } catch (NumberFormatException ex) {
-                    // Si la conversión del valor del nuevo nodo falla, muestra un mensaje de error
-                    JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Introduce un valor válido para el nuevo nodo", "Error", JOptionPane.ERROR_MESSAGE);
+                    if(modoNumerico == true){
+                        JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Introduce un valor valido para el nuevo nodo", "Error", JOptionPane.ERROR_MESSAGE);
+                    }else{
+                        if (valorNodoStr.length() == 1) {
+                            char valorCaracter = valorNodoStr.charAt(0);
+                            int valorAscii = (int) valorCaracter;
+                            b= arbol.MainTree.insertar(new Nodo(valorAscii));
+                            revalidate();
+                            repaint();
+                            if(b)
+                            JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Nodo anadido con exito");
+                            else
+                            JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Nodo ya existente");
+                        } else {
+                            // Si no es ni número ni un caracter, mostrar un mensaje de error
+                            JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Introduce un valor valido para el nuevo nodo", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+
+
                 }
             }
         });
@@ -136,18 +185,40 @@ public class DibujarArbolGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Pide al usuario que introduzca el valor del nuevo nodo
                 String valorNodoStr = JOptionPane.showInputDialog(DibujarArbolGUI.this, "Introduce el valor del nodo a eliminar");
-        
+                 boolean b;
                 // Intenta convertir el valor del nuevo nodo a entero
                 try {
+                    if (!modoNumerico) {
+                    throw new NumberFormatException();
+                    }
                     int valorNodo = Integer.parseInt(valorNodoStr);
-                        // Si el nodo padre existe, agrega el nuevo nodo
-                            arbol.MainTree.Delete(arbol.MainTree.search(new Nodo(valorNodo)));
+                            
+                           b = arbol.MainTree.Delete(arbol.MainTree.search(new Nodo(valorNodo)));
                             revalidate(); // Actualizar el contenido del JFrame
                             repaint();
-                            JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Nodo eliminado con éxito");
+                            if(b)
+                            JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Nodo eliminado con exito");
+                            else
+                            JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Nodo no existente");
                 } catch (NumberFormatException ex) {
-                    // Si la conversión del valor del nuevo nodo falla, muestra un mensaje de error
-                    JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Introduce un valor válido para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+                    if(modoNumerico == true){
+                        JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Introduce un valor valido para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+                    }else{
+                        if (valorNodoStr.length() == 1) {
+                            char valorCaracter = valorNodoStr.charAt(0);
+                            int valorAscii = (int) valorCaracter;
+                            b =arbol.MainTree.Delete(arbol.MainTree.search(new Nodo(valorAscii)));
+                            revalidate();
+                            repaint();
+                            if(b)
+                            JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Nodo eliminado con exito");
+                            else
+                            JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Nodo no existente");
+                        } else {
+                            // Si no es ni número ni un caracter, mostrar un mensaje de error
+                            JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Introduce un valor valido para para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
                 }
             }
         });
@@ -158,42 +229,80 @@ public class DibujarArbolGUI extends JFrame {
                 String valorNodoStr = JOptionPane.showInputDialog(DibujarArbolGUI.this, "Introduce el valor del nodo a buscar");
                 // Intenta convertir el valor del nuevo nodo a entero
                 try {
+                    if (!modoNumerico) {
+                    throw new NumberFormatException();
+                    }
                     int valorNodo = Integer.parseInt(valorNodoStr);
-                        // Si el nodo padre existe, agrega el nuevo nodo
+
                            Nodo searched = arbol.MainTree.search(new Nodo(valorNodo));
                             revalidate(); // Actualizar el contenido del JFrame
                             repaint();
                             if(searched!=null){
-                                JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Nodo "+ searched.getValue() + " encontrado con éxito");
+                                JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Nodo "+ searched.getValue() + " encontrado con exito");
                             }else{
                                 JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Nodo no encontrado");
                             }
 
                 } catch (NumberFormatException ex) {
-                    // Si la conversión del valor del nuevo nodo falla, muestra un mensaje de error
-                    JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Introduce un valor válido a buscar", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                     if(modoNumerico == true){
+                        JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Introduce un valor valido para buscar", "Error", JOptionPane.ERROR_MESSAGE);
+                    }else{
+                        if (valorNodoStr.length() == 1) {
+                            char valorCaracter = valorNodoStr.charAt(0);
+                            int valorAscii = (int) valorCaracter;
+                            Nodo searched = arbol.MainTree.search(new Nodo(valorAscii));
+                            repaint();
+                            if(searched!=null){
+                                JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Nodo "+ (char) searched.getValue() + " encontrado con exito");
+                            }else{
+                                JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Nodo no encontrado");
+                            }
+                        } else {
+                            // Si no es ni número ni un caracter, mostrar un mensaje de error
+                            JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Introduce un valor valido para encontrar", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }}
             }
         });
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
     private void inicializarArbol() {
      // Pide al usuario que introduzca el valor de la raíz
-     String valorRaizStr = JOptionPane.showInputDialog(this, "Introduce el valor de la raíz:");
+     String valorRaizStr = JOptionPane.showInputDialog(this, "Introduce el valor de la raiz:");
      // Intenta convertir el valor de la raíz a entero
      try {
+        if (!modoNumerico) {
+            throw new NumberFormatException();
+        }
          int valorRaiz = Integer.parseInt(valorRaizStr);
-         // Crea el árbol con el valor de la raíz
-         arbol = new AVL(new Nodo(null, null, null, valorRaiz, 0, 0, 0), true);
-         
+         // Crea el arbol con el valor de la raíz
+            arbol = new AVL(new Nodo(null, null, null, valorRaiz, 0, 0, 0), true);
+            arbolPanel = new ArbolPanel(arbol); // Crear ArbolPanel después de inicializar el arbol
+            add(arbolPanel); // Agregar ArbolPanel al JFrame
+            revalidate(); // Actualizar el contenido del JFrame
+                JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Arbol creado");
      } catch (NumberFormatException e) {
-         // Si la conversión falla, muestra un mensaje de error
-         JOptionPane.showMessageDialog(this, "Introduce un valor válido para la raíz", "Error", JOptionPane.ERROR_MESSAGE);
-     }
+                      if(modoNumerico == true){
+                        JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Introduce un valor valido para la raiz", "Error", JOptionPane.ERROR_MESSAGE);
+                    }else{
+                        if (valorRaizStr.length() == 1) {
+                            char valorCaracter = valorRaizStr.charAt(0);
+                            int valorAscii = (int) valorCaracter;
+                            arbol = new AVL(new Nodo(null, null, null, valorAscii, 0, 0, 0), true);
+                            arbolPanel = new ArbolPanel(arbol); // Crear ArbolPanel después de inicializar el arbol
+                            add(arbolPanel); // Agregar ArbolPanel al JFrame
+                            revalidate(); // Actualizar el contenido del JFrame
+                            JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Nodo anadido con exito (modo letras)");
+                        } else {
+                            // Si no es ni número ni un caracter, mostrar un mensaje de error
+                            JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Introduce un valor valido para la raiz", "Error", JOptionPane.ERROR_MESSAGE);
+                        }
+                    } }
     }
 
     public static void main(String[] args) {

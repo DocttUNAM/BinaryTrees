@@ -1,28 +1,73 @@
+/**
+ * La clase AVL representa un árbol de búsqueda binario auto-balanceado utilizando la estructura de árbol AVL.
+ * Incluye métodos para insertar nodos, actualizar alturas de nodos y realizar rotaciones para mantener
+ * la propiedad AVL. La clase también proporciona métodos para búsqueda, eliminación de nodos y equilibrado
+ * del árbol después de inserciones o eliminaciones.
+ *
+ * El árbol está representado por nodos de la clase 'Nodo', y cada nodo contiene un valor, referencias a los
+ * hijos izquierdo y derecho, referencia al padre, altura y factor de equilibrio.
+ *
+ * @author [Daniel Hernandez]
+ * @version 1.0
+ */
 package AVL;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class AVL {
+    /**
+     * El nodo raíz del árbol AVL.
+     */
     public Nodo Raiz;
+    /**
+     * Referencia estática al árbol AVL principal.
+     */
     public static AVL MainTree;
+    /**
+     * Variable estática para rastrear el número de nodos en el árbol AVL.
+     */
     public static int nv = 0;
+    /**
+     * Construye un árbol AVL con el nodo raíz dado.
+     *
+     * @param Raiz El nodo raíz del árbol AVL.
+     */
     public AVL(Nodo Raiz) {
         this.Raiz = Raiz;
     }
+    /**
+     * Construye un árbol AVL con el nodo raíz dado e inicializa la referencia MainTree.
+     *
+     * @param Raiz El nodo raíz del árbol AVL.
+     * @param b    Un valor booleano, para aprovechar la sobrecarga de metodos.
+     */
     public AVL(Nodo Raiz, boolean b){
         this.Raiz = Raiz;
         AVL.MainTree = this;
         nv=0;
     }
-
+    /**
+     * Obtiene el nodo raíz del árbol AVL.
+     *
+     * @return El nodo raíz del árbol AVL.
+     */
     public Nodo getRaiz() {
         return this.Raiz;
     }
-
+    /**
+     * Establece el nodo raíz del árbol AVL.
+     *
+     * @param Raiz El nuevo nodo raíz del árbol AVL.
+     */
     public void setRaiz(Nodo Raiz) {
         this.Raiz = Raiz;
     }
-
+    /**
+     * Inserta un nodo en el árbol AVL.
+     *
+     * @param node El nodo a insertar.
+     * @return true si la inserción fue exitosa, false de lo contrario.
+     */
     //Inserta un valorm en este caso se crea un arbol como si cada subnodo fuera un subarbol
     public boolean insertar(Nodo node){
         if(node.value> this.Raiz.value){
@@ -59,7 +104,11 @@ public class AVL {
         }
         return false;
     }
-
+     /**
+     * Actualiza las alturas de los nodos en el subárbol dado.
+     *
+     * @param nodo El nodo raíz del subárbol.
+     */
     public static void actualizarAlturaTD(Nodo nodo) {
  
         if (nodo == null) {
@@ -77,6 +126,11 @@ public class AVL {
         nodo.deepder = alturaDerecha;
         nodo.deepizq = alturaIzquierda;
     }
+    /**
+     * Realiza una rotación simple a la izquierda en el subárbol dado.
+     *
+     * @param subtree El subárbol en el que se realizará la rotación.
+     */
     public static void RSI(AVL subtree){
         if(subtree == null)
         return;
@@ -109,7 +163,11 @@ public class AVL {
             subtree.Raiz.Hizq.insertar(aux.getRaiz());
         actualizarAlturaTD(MainTree.getRaiz());       
     }
-
+    /**
+     * Realiza una rotación simple a la derecha en el subárbol dado.
+     *
+     * @param subtree El subárbol en el que se realizará la rotación.
+     */
    public static void RSD(AVL subtree){
         if(subtree == null)
         return;
@@ -146,20 +204,30 @@ public class AVL {
 
 
 
-
+     /**
+     * Realiza una rotación doble a la izquierda
+     *
+     * @param subtree El subárbol en el que se realizará la rotación doble.
+     */
     public static void RDI(AVL subtree){
         if(subtree ==null) return;
         RSI(subtree.Raiz.Hizq);
         RSD(subtree);
   
     }
-
+    /**
+     * Realiza una rotación doble a la derecha
+     *
+     * @param subtree El subárbol en el que se realizará la rotación doble.
+     */
     public static void RDD(AVL subtree){
         RSD(subtree.Raiz.Hder);
         RSI(subtree);
     }
 
-
+     /**
+     * BFS del árbol AVL e imprime la información de cada nodo.
+     */
     public void bfs(){
         if (this.Raiz == null) {
             return;
@@ -191,7 +259,12 @@ public class AVL {
         }
     }
 
-
+    /**
+     * Realiza un DFS en el árbol AVL
+     * y devuelve el primer subárbol desequilibrado encontrado.
+     *
+     * @return El primer subárbol desequilibrado encontrado.
+     */
      public AVL dfsizqAVL(){
         if(this.Raiz.Hizq != null)
             if( this.getRaiz().Hizq.getRaiz().getEq() <2 && this.getRaiz().Hizq.getRaiz().getEq() >1 ||  this.getRaiz().Hizq.getRaiz().getEq() <2 && this.getRaiz().Hizq.getRaiz().getEq() <-1)
@@ -212,7 +285,12 @@ public class AVL {
         }
         return null;
     }
-
+    /**
+     * Realiza un DFS en el árbol AVL
+     * y devuelve el primer subárbol desequilibrado encontrado.
+     *
+    * @return El primer subárbol desequilibrado encontrado.
+     */
      public AVL dfsderAVL(){
 
         if(this.Raiz.Hder !=null)
@@ -238,7 +316,11 @@ public class AVL {
         }
         return null;
     }
-
+     /**
+     * Realiza el equilibrado del árbol AVL después de una inserción o eliminación.
+     *
+     * @param subtree El subárbol a equilibrar.
+     */
     public static void Equilibrar(AVL subtree){
         if(subtree == null)
         return;
@@ -260,8 +342,12 @@ public class AVL {
                 }
             //actualizarAlturaTD(MainTree.Raiz);
     }
-
-
+    /**
+     * Busca un nodo con el valor dado en el árbol AVL.
+     *
+     * @param ToSearch El nodo a buscar.
+     * @return El nodo encontrado o null si no se encontró.
+     */
         public Nodo search(Nodo ToSearch){
         if (this.Raiz == null) {
             return null;
@@ -276,12 +362,18 @@ public class AVL {
         }
         return null;
     }
-
-    public void Delete(Nodo nodo){
+    
+    /**
+     * Elimina un nodo con el valor dado del árbol AVL.
+     *
+     * @param nodo El nodo a eliminar.
+     * @return true si la eliminación fue exitosa, false de lo contrario.
+     */
+    public boolean Delete(Nodo nodo){
 
         if(nodo == null){
             System.out.println("No exite el nodo en el arbol");
-            return;
+            return false;
         }
          
         //Es una hoja?
@@ -309,7 +401,7 @@ public class AVL {
                 }else{
                     AVL.Equilibrar(aux2);
                 }
-            return;
+            return true;
         }
         //No es una hoja pero no tiene subarbol derecho
         if(nodo.Hder == null){
@@ -327,7 +419,7 @@ public class AVL {
                 }else{
                     AVL.Equilibrar(aux2);
                 }
-            return;
+            return true;
            
         }
          //No es una hoja pero no tiene subarbol izquierdo
@@ -346,7 +438,7 @@ public class AVL {
                 }else{
                     AVL.Equilibrar(aux2);
                 }
-            return;
+            return true;
         }
         
         //No es una hoja pero tiene ambos subarboles
@@ -367,6 +459,9 @@ public class AVL {
                 }else{
                     AVL.Equilibrar(aux2);
                 }
+
+
+                return true;
     }
 
 
