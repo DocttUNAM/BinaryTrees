@@ -1,0 +1,56 @@
+@startuml
+
+package Arboles.ArbolAVL.AVL {
+
+  class AVL {
+    - Raiz: Nodo
+    + MainTree: AVL
+    + nv: int
+    + AVL(Raiz: Nodo)
+    + AVL(Raiz: Nodo, b: boolean)
+    + getRaiz(): Nodo
+    + setRaiz(Raiz: Nodo)
+    + insertar(node: Nodo): boolean
+    + actualizarAlturaTD(nodo: Nodo)
+    + RSI(subtree: AVL)
+    + RSD(subtree: AVL)
+    + RDI(subtree: AVL)
+    + RDD(subtree: AVL)
+    + Equilibrar(subtree: AVL)
+    + search(ToSearch: Nodo): Nodo
+    + Delete(nodo: Nodo): boolean
+    + bfs()
+    + dfsizqAVL(): AVL
+    + dfsderAVL(): AVL
+  }
+
+  class Nodo {
+    - value: int
+    - Hizq: AVL
+    - Hder: AVL
+    - Padre: Nodo
+    - deep: int
+    - eq: int
+    - deepizq: int
+    - deepder: int
+    + Nodo(value: int, Hizq: AVL, Hder: AVL, Padre: Nodo, deep: int, eq: int, deepizq: int, deepder: int)
+    + Nodo(value: int)
+    + getValue(): int
+    + setValue(value: int)
+    + getHizq(): AVL
+    + setHizq(Hizq: AVL)
+    + getHder(): AVL
+    + setHder(Hder: AVL)
+    + getPadre(): Nodo
+    + setPadre(Padre: Nodo)
+    + getDeep(): int
+    + setDeep(deep: int)
+    + getEq(): int
+    + setEq(eq: int)
+    + getDeepizq(): int
+    + setDeepizq(deepizq: int)
+    + getDeepder(): int
+    + setDeepder(deepder: int)
+  }
+}
+@enduml

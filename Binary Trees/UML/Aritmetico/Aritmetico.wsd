@@ -1,0 +1,38 @@
+@startuml
+package Arboles.ArbolAritmetico.Aritmetico {
+
+  class Aritmetico {
+    - MainRaiz: Nodo
+    + pila: Stack<Float>
+    + Aritmetico()
+    + construir(s: String): boolean
+    + esOperador(token: String): boolean
+    + bfs()
+    + NotacionPolacaInversa(node: Nodo, pila: Stack<Float>)
+    + prioridad(operador: String): int
+  }
+
+  class Nodo {
+    - value: float
+    - op: String
+    - Padre: Nodo
+    - Hder: Nodo
+    - Hizq: Nodo
+    + Nodo(value: float, op: String, Padre: Nodo, Hder: Nodo, Hizq: Nodo)
+    + Nodo(value: float)
+    + Nodo(op: String)
+    + getValue(): float
+    + setValue(value: float)
+    + getOp(): String
+    + setOp(op: String)
+    + getPadre(): Nodo
+    + setPadre(Padre: Nodo)
+    + getHder(): Nodo
+    + setHder(Hder: Nodo)
+    + getHizq(): Nodo
+    + setHizq(Hizq: Nodo)
+  }
+
+}
+
+@enduml

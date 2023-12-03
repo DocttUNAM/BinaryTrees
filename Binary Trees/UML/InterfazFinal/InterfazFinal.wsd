@@ -1,0 +1,114 @@
+@startuml
+
+class NodoAVL {
+    - hizq: NodoAVL
+    - hder: NodoAVL
+    - raiz: NodoAVL
+    - value: int
+    - eq: int
+    + NodoAVL(hizq: NodoAVL, hder: NodoAVL, raiz: NodoAVL, value: int, eq: int)
+}
+
+class AVL {
+    - MainTree: NodoAVL
+    + AVL(MainTree: NodoAVL)
+    + insertar(nodo: NodoAVL): boolean
+    + Delete(nodo: NodoAVL): boolean
+    + search(nodo: NodoAVL): NodoAVL
+}
+
+class NodoHeap {
+    - hizq: NodoHeap
+    - hder: NodoHeap
+    - raiz: NodoHeap
+    - value: int
+    + NodoHeap(hizq: NodoHeap, hder: NodoHeap, raiz: NodoHeap, value: int)
+}
+
+class Heap {
+    - MainRaiz: NodoHeap
+    + Heap(MainRaiz: NodoHeap)
+    + insertar(nodo: NodoHeap): boolean
+    + extraerRaiz()
+}
+
+class NodoAritmetico {
+    - hizq: NodoAritmetico
+    - hder: NodoAritmetico
+    - value: int
+    - op: String
+    + NodoAritmetico(hizq: NodoAritmetico, hder: NodoAritmetico, value: int, op: String)
+}
+
+class Aritmetico {
+    - MainRaiz: NodoAritmetico
+    - pila: Stack
+    + Aritmetico()
+    + construir(expresion: String)
+    + NotacionPolacaInversa(nodo: NodoAritmetico, pila: Stack)
+}
+
+class ArbolPanel {
+    - arbol: AVL or Heap or Aritmetico
+    + calcularPosiciones(nodo: NodoAVL or NodoHeap or NodoAritmetico, x: int, y: int, nivel: int, distanciaHorizontal: int, posiciones: Map<NodoAVL or NodoHeap or NodoAritmetico, Point>)
+    + generarPosiciones(tree: AVL or Heap or Aritmetico): Map<NodoAVL or NodoHeap or NodoAritmetico, Point>
+    + setArbol(arbol: AVL or Heap or Aritmetico)
+    + ArbolPanel(arbol: AVL or Heap or Aritmetico)
+    + paintComponent(g: Graphics)
+    + dibujarArbol(g: Graphics)
+}
+
+class AVLGUI {
+    - arbol: AVL
+    - modoNumerico: boolean
+    - arbolPanel: ArbolPanel
+    + AVLGUI()
+    + inicializarArbol()
+}
+
+class HeapGUI {
+    - arbol: Heap
+    - modoNumerico: boolean
+    - MaxHeap: boolean
+    - arbolPanel: ArbolPanel
+    + HeapGUI()
+    + inicializarArbol()
+}
+
+class ArbolPanelAritmetico {
+    - arbol: Aritmetico
+    + calcularPosiciones(nodo: NodoAritmetico, x: int, y: int, nivel: int, distanciaHorizontal: int, posiciones: Map<NodoAritmetico, Point>)
+    + generarPosiciones(tree: Aritmetico): Map<NodoAritmetico, Point>
+    + setArbol(arbol: Aritmetico)
+    + ArbolPanel(arbol: Aritmetico)
+    + paintComponent(g: Graphics)
+    + dibujarArbol(g: Graphics)
+}
+
+class DibujarArbolGUI {
+    - arbol: Aritmetico
+    - arbolPanel: ArbolPanelAritmetico
+    - b: boolean
+    + DibujarArbolGUI()
+    + inicializarArbol()
+}
+
+class MenuPrincipal {
+    - frameStack: Stack<JFrame>
+    + MenuPrincipal()
+    + abrirNuevoFrame(nuevoFrame: JFrame)
+    + regresarAlMenuPrincipal()
+    + main(String[] args)
+}
+
+MenuPrincipal --|> JFrame
+AVL --|> NodoAVL
+ArbolPanel --|> JPanel
+AVLGUI --|> JFrame
+Heap --|> NodoHeap
+HeapGUI --|> JFrame
+ArbolPanelAritmetico --|> JPanel
+DibujarArbolGUI --|> JFrame
+Aritmetico --|> NodoAritmetico
+
+@enduml

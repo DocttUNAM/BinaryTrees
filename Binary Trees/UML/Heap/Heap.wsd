@@ -1,0 +1,28 @@
+@startuml
+
+package Arboles.ArbolHeap.Heap {
+    class Heap {
+        +nv: int
+        +MainRaiz: Heap
+        +Raiz: Nodo
+        +Ultimo: Heap
+        +Max: boolean
+
+        {static} +EncontrarUltimo()
+        +getRaiz(): Nodo
+        +setRaiz(Raiz: Nodo)
+        +insertar(node: Nodo): boolean
+        +bfs()
+        +extraerRaiz(): int
+        -obtenerUltimoNodo(): Heap
+    }
+    class Nodo {
+        -value: int
+        -Padre: Nodo
+        -Hizq: Heap
+        -Hder: Heap
+        +getValue(): int
+    }
+}
+
+@enduml
