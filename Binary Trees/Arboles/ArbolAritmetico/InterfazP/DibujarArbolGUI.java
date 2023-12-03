@@ -115,7 +115,7 @@ public class DibujarArbolGUI extends JFrame {
             public void actionPerformed(ActionEvent e) {
                     if(!b)
                     arbol.NotacionPolacaInversa(arbol.MainRaiz, arbol.pila);
-                    int r = arbol.pila.peek();
+                    float r = (float)arbol.pila.peek();
                     JOptionPane.showMessageDialog(DibujarArbolGUI.this, "Resolucion: " + r);
                     b = true;
                     arbolPanel.repaint();

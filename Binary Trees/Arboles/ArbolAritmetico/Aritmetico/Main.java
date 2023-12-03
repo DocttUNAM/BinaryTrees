@@ -4,7 +4,7 @@ import Arboles.ArbolAritmetico.Aritmetico.*;
 
 public class Main {
     public static void main(String[] args) {
-        String expresion = "2 * 9 / ( 2 + 1 ) + 8 - 3 * 4";
+        String expresion = "2 √ 25 ";
         
         // Construir el árbol en infix
         Aritmetico T1 = new Aritmetico();

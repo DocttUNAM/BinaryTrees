@@ -1,14 +1,34 @@
+// -*- coding: utf-8 -*-
 package Arboles.ArbolAritmetico.Aritmetico;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
-
+/**
+ * La clase Aritmetico representa una expresión aritmética y su estructura de árbol asociada.
+ * Se utiliza para construir un árbol aritmético a partir de una expresión.
+ * La clase utiliza la clase Nodo para representar los nodos del árbol.
+ */
 public class Aritmetico {
- public Nodo MainRaiz;
-public static Stack<Integer> pila = new Stack<>();
-    public Aritmetico() {
-    }
-
+  /**
+   * Raíz principal del árbol aritmético.
+   */
+   public Nodo MainRaiz;
+   /**
+   * Pila estática utilizada en la construcción del árbol aritmético, almaecena el resultado final.
+   */
+   public static Stack<Float> pila = new Stack<>();
+   
+   /**
+    * Constructor predeterminado de la clase Aritmetico.
+   */
+   public Aritmetico() {
+   }
+   /**
+     * Construye el árbol aritmético a partir de una expresión
+     *
+     * @param s La expresión
+     * @return true si la construcción es exitosa, false en caso contrario.
+     */
  public boolean construir(String s){
    Aritmetico.pila.clear();
    String[] tokens = s.split(" ");
@@ -54,10 +74,20 @@ public static Stack<Integer> pila = new Stack<>();
     return true;
  }
 
+ /**
+   * Verifica si un token es un operador aritmético.
+   *
+   * @param token  El token (caracter) a verificar.
+   * @return true si el token es un operador, false en caso contrario.
+   */
  public static boolean esOperador(String token) {
-   return token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/") || token.equals("(") || token.equals(")");
+   return token.equals("+") || token.equals("-") || token.equals("*") || token.equals("/") || token.equals("(") || token.equals(")" ) || token.equals("^" ) || token.equals("√" );
 }
 
+   /**
+   * Realiza un BFS en el árbol aritmético e imprime los nodos
+   * junto con información sobre sus padres, hijos izquierdos y derechos.
+   */
     public void bfs(){
         if (this.MainRaiz == null) {
             return;
@@ -81,7 +111,6 @@ public static Stack<Integer> pila = new Stack<>();
                 }else{
                      System.out.print(" Padre: " + actual.Padre.value);
                 }
-
                 if(actual.Hizq != null)
                 if(actual.Hizq.op != null){
                 System.out.print(" Hizq: " + actual.Hizq.op);
@@ -108,8 +137,14 @@ public static Stack<Integer> pila = new Stack<>();
             System.out.println();
         }
     }
-
-    public void NotacionPolacaInversa(Nodo node, Stack<Integer> pila){
+    /**
+   * Realiza un recorrido en postorden en el árbol aritmético y evalúa las expresiones
+   * utilizando la notación polaca inversa. El resultado se almacena en una pila.
+   *
+   * @param node El nodo actual en el recorrido.
+   * @param pila La pila utilizada para almacenar los resultados parciales.
+   */
+    public void NotacionPolacaInversa(Nodo node, Stack<Float> pila){
       if(node != null){
       if(node.Hizq!=null)
       NotacionPolacaInversa(node.Hizq, pila);
@@ -119,26 +154,37 @@ public static Stack<Integer> pila = new Stack<>();
       if(node.Hder == null && node.Hizq == null){
          pila.push(node.value);
       }else if(pila.size() >=2) {
-         int derecha;
-         int izquierda;
+         float derecha;
+         float izquierda;
          derecha =pila.pop();
          izquierda = pila.pop();
+         System.out.println(izquierda);
+         System.out.println(derecha);
          switch (node.op.charAt(0)) {
             case '+': pila.push(izquierda + derecha); break;
             case '-': pila.push(izquierda - derecha); break;
             case '*': pila.push(izquierda * derecha); break;
             case '/': pila.push(izquierda / derecha); break;
+            case '\u005E': pila.push((float)Math.pow(izquierda, derecha));break;
+            default: pila.push((float)Math.pow(derecha, 1.0 / izquierda)); break;
         }
       }
       }
     }
-
+   /**
+     * Obtiene la prioridad de un operador aritmético.
+     *
+     * @param operador El operador del cual se obtiene la prioridad.
+     * @return La prioridad del operador.
+   */
     public static int prioridad(String operador) {
       switch (operador) {
           case "+": return 1;
           case "-": return 1;
           case "*": return 2;
           case "/": return 2;
+          case "^": return 3;
+          case "√": return 3;
           default: return 0;
       }
   }

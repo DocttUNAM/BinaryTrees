@@ -1,11 +1,22 @@
 package Arboles.ArbolHeap.Heap;
-import Arboles.ArbolHeap.Heap;
 
 public class Main {
     public static void main(String[] args) {
-        Heap T1 = new Heap(new Nodo(1), false);
+        Heap T1 = new Heap(new Nodo(5), true);
         System.out.println("Test 0");
         T1.bfs();
+        T1.insertar(new Nodo(2));
+        System.out.println("Test 4");
+        T1.bfs();
+        T1.insertar(new Nodo(2));
+        System.out.println("Test 4");
+        T1.bfs();
+        T1.insertar(new Nodo(3));
+        System.out.println("Test 3");
+        T1.bfs();
+        T1.extraerRaiz();
+        T1.bfs();
+        /* 
         T1.insertar(new Nodo(8));
         System.out.println("Test 1");
         T1.bfs();
@@ -61,5 +72,6 @@ public class Main {
             System.out.println("Vacio");
         }else
         Heap.MainRaiz.bfs();
+        */
     }
 }

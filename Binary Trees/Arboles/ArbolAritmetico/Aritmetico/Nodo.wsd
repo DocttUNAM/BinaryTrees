@@ -1,0 +1,28 @@
+@startuml
+package Arboles.ArbolAritmetico.Aritmetico {
+
+  class Nodo {
+    - value: float
+    - op: String
+    - Padre: Nodo
+    - Hder: Nodo
+    - Hizq: Nodo
+
+    + Nodo(float value, String op, Nodo Padre, Nodo Hder, Nodo Hizq)
+    + Nodo(float value)
+    + Nodo(String op)
+    + getValue(): float
+    + setValue(float value)
+    + getOp(): String
+    + setOp(String op)
+    + getPadre(): Nodo
+    + setPadre(Nodo Padre)
+    + getHder(): Nodo
+    + setHder(Nodo Hder)
+    + getHizq(): Nodo
+    + setHizq(Nodo Hizq)
+  }
+
+}
+
+@enduml

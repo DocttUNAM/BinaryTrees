@@ -383,6 +383,7 @@ public class AVL {
                 AVL.nv =0;
                 AVL.MainTree =null;
                 this.Raiz =null;
+                return true;
             }else{
                 if(nodo.Padre.Raiz.Hder!=null && nodo.Padre.Raiz.Hizq !=null)
                     if(nodo.Padre.Raiz.Hder.Raiz.value == nodo.value){

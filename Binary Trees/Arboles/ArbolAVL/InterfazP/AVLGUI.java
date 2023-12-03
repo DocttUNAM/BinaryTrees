@@ -192,9 +192,23 @@ public class AVLGUI extends JFrame {
                     }
                     int valorNodo = Integer.parseInt(valorNodoStr);
                             
-                           b = arbol.MainTree.Delete(arbol.MainTree.search(new Nodo(valorNodo)));
+
+
+                           
+  
+                            try {
+                            b = arbol.MainTree.Delete(arbol.MainTree.search(new Nodo(valorNodo)));
+                                if(arbol.MainTree == null)
+                                    getContentPane().removeAll(); // Eliminar todos los componentes del JFrame
+                            } catch (Exception ef) {
+                                b=true;
+                            getContentPane().removeAll(); // Eliminar todos los componentes del JFrame
+                            }
+
                             revalidate(); // Actualizar el contenido del JFrame
                             repaint();
+                           
+
                             if(b)
                             JOptionPane.showMessageDialog(AVLGUI.this, "Nodo eliminado con exito");
                             else

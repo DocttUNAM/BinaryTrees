@@ -46,7 +46,7 @@ class ArbolPanel extends JPanel {
     }
 
     private void dibujarArbol(Graphics g) {
-        Map<Nodo, Point> posiciones = generarPosiciones(this.arbol);
+        Map<Nodo, Point> posiciones = generarPosiciones(this.arbol.MainRaiz);
 
         for (Map.Entry<Nodo, Point> entry : posiciones.entrySet()) {
             Nodo nodo = entry.getKey();
@@ -86,7 +86,7 @@ public class HeapGUI extends JFrame {
     private Heap arbol;
     public static boolean modoNumerico = true; // Modo predeterminado
     private ArbolPanel arbolPanel;
-
+    public static boolean MaxHeap = true; // Modo predeterminado
     public HeapGUI() {
         super("Dibujar Arbol");
         JMenuBar menuBar = new JMenuBar();
@@ -118,7 +118,17 @@ public class HeapGUI extends JFrame {
                         opciones,
                         opciones[0]
                 );
-
+                Object[] modos = {"MaxHeap", "MinHeap"};
+                int seleccion2 = JOptionPane.showOptionDialog(
+                        HeapGUI.this,
+                        "Selecciona el modo:",
+                        "Modo",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        modos,
+                        modos[0]
+                );
                 // Determinar el modo seleccionado por el usuario
                 if (seleccion == 0) {
                     modoNumerico = true;
@@ -126,6 +136,13 @@ public class HeapGUI extends JFrame {
                 } else if (seleccion == 1) {
                     modoNumerico = false;
                     JOptionPane.showMessageDialog(HeapGUI.this, "Modo Letras seleccionado");
+                }
+                if (seleccion2 == 0) {
+                    MaxHeap = true;
+                    JOptionPane.showMessageDialog(HeapGUI.this, "Max Heap seleccionado");
+                } else if (seleccion2 == 1) {
+                    MaxHeap = false;
+                    JOptionPane.showMessageDialog(HeapGUI.this, "MinHeap Seleccionado");
                 }
                 inicializarArbol(); // Lógica para inicializar el arbol
             }
@@ -179,8 +196,15 @@ public class HeapGUI extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                     arbol.MainRaiz.extraerRaiz();
+                    if(arbol.MainRaiz != null){
                     revalidate(); // Actualizar el contenido del JFrame
                     repaint();
+                    }else{
+                        getContentPane().removeAll(); // Eliminar todos los componentes del JFrame
+                        revalidate(); // Actualizar el contenido del JFrame
+                        repaint();
+                    }
+
                     JOptionPane.showMessageDialog(HeapGUI.this, "Raiz extraida con exito");
             }
         });
@@ -201,7 +225,7 @@ public class HeapGUI extends JFrame {
         }
          int valorRaiz = Integer.parseInt(valorRaizStr);
          // Crea el arbol con el valor de la raíz
-            arbol = new Heap(new Nodo(valorRaiz),false);
+            arbol = new Heap(new Nodo(valorRaiz),MaxHeap);
             arbolPanel = new ArbolPanel(arbol); // Crear ArbolPanel después de inicializar el arbol
             add(arbolPanel); // Agregar ArbolPanel al JFrame
             revalidate(); // Actualizar el contenido del JFrame
@@ -213,7 +237,7 @@ public class HeapGUI extends JFrame {
                         if (valorRaizStr.length() == 1) {
                             char valorCaracter = valorRaizStr.charAt(0);
                             int valorAscii = (int) valorCaracter;
-                            arbol = new Heap(new Nodo(valorAscii),false);
+                            arbol = new Heap(new Nodo(valorAscii),MaxHeap);
                             arbolPanel = new ArbolPanel(arbol); // Crear ArbolPanel después de inicializar el arbol
                             add(arbolPanel); // Agregar ArbolPanel al JFrame
                             revalidate(); // Actualizar el contenido del JFrame
